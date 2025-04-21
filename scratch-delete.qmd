@@ -1,0 +1,41 @@
+---
+title: "scratch-delete"
+format: html
+editor: visual
+---
+```{r}
+library(leaflet)
+library(htmltools)
+
+```
+
+```{r}
+# Add the VectorGrid plugin
+vectorGridScript <- tags$script(src = "https://unpkg.com/leaflet.vectorgrid@latest/dist/Leaflet.VectorGrid.bundled.js")
+
+# Create map with the plugin loaded
+leaflet() %>%
+  addTiles() %>% # Add base map
+  htmlwidgets::prependContent(vectorGridScript) %>%
+  htmlwidgets::onRender("
+    function(el, x) {
+      var map = this;
+      var pbfLayer = L.vectorGrid.protobuf('http://localhost:3000/data/usa_low/{z}/{x}/{y}.pbf', {
+        vectorTileLayerStyles: {
+          blocks: {
+            weight: 1,
+            color: '#007AFF',
+            opacity: 0.6,
+            fill: true,
+            fillColor: '#007AFF',
+            fillOpacity: 0.6
+          }
+        },
+        interactive: true,
+        rendererFactory: L.canvas.tile
+      }).addTo(map);
+    }
+  ") %>%
+  setView(lng = -98.5795, lat = 39.8283, zoom = 5)
+```
+
