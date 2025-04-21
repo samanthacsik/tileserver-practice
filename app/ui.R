@@ -1,1 +1,4 @@
-ui <- fluidPage()
+ui <- fluidPage(
+  
+  leafletOutput(outputId = "map_output")
+)
